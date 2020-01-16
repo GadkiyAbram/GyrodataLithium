@@ -71,8 +71,12 @@ public class BatteryActivity extends AppCompatActivity {
                 con = DriverManager.getConnection(MSSQL_DB, MSSQL_LOGIN,MSSQL_PASS);
                 if (con != null){
                     Log.d(LOG_TAG, "Connection established");
-                    stmt = con.createStatement();
-                    rs = stmt.executeQuery(query);
+                    // get back if wrong
+//                    stmt = con.createStatement();
+
+                    PreparedStatement stmt = con.prepareStatement("EXEC spGetAll_Batteries");
+
+                    rs = stmt.executeQuery();
                     while (rs.next()) {
                         Log.d(LOG_TAG, "" + rs.getString("serNum1"));
                         int _id = rs.getInt("ID");
@@ -95,7 +99,7 @@ public class BatteryActivity extends AppCompatActivity {
                 //close connection ,stmt and resultset here
                 if (con != null){
                     try { con.close(); } catch(SQLException se) { /*can't do anything */ }
-                    try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
+//                    try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
                     try { rs.close(); } catch(SQLException se) { /*can't do anything */ }
                 }
             }
